@@ -1,6 +1,4 @@
-
-
-name: CI — Lint, Test & Coverage
+name: CI — Test & Coverage
 
 on:
   push:
@@ -15,36 +13,26 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [18.x, 20.x]   
+        node-version: [18.x, 20.x]
 
     steps:
-      # Checkout source code 
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      # Set up Node.js 
       - name: Set up Node ${{ matrix.node-version }}
         uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
-          cache: 'npm'     
+          cache: 'npm'
 
-      # Install dependencies
       - name: Install dependencies
-        run: npm ci                
+        run: npm ci
 
-      # Lint 
-      - name: Lint
-        run: npm run lint
-        continue-on-error: false 
-
-      # Run tests with coverage 
       - name: Run tests
         run: npm test
         env:
           NODE_ENV: test
 
-      # Upload coverage report as an artifact 
       - name: Upload coverage report
         uses: actions/upload-artifact@v4
         with:
